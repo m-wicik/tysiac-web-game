@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Tysiąc</title>
+        <link rel="stylesheet" href="style.css"/>
+    </head>
+    <body>
+        <div id="start-screen-container">
+            <div class="start-content">
+                <h1>Tysiąc</h1>
+                <button id="start-button">Play</button>
+            </div>
+        </div>
+        <div id="game-container" style="display: none">
+            <h1>Tysiąc</h1>
+            <div class="table-container">
+                <table id="scoreboard">
+                    <tr>
+                        <th>You</th>
+                        <th>Alice</th>
+                        <th>Bob</th>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                </table>
+            </div>
+            <br><br>
+            <div id="alice-hand"></div><br>
+            <div id="bob-hand"></div><br>
+            <div id="your-hand"></div><br>
+            <div id="announcement"></div><br>
+            <div id="buttons"></div>
+            <script src="game.js"></script>
+        </div>
+    </body>
+</html>

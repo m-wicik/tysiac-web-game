@@ -1,0 +1,71 @@
+body {
+  font-family: sans-serif;
+  background-color: #3f3f3f;
+  color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+#game-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+#message-log {
+  margin-top: 20px;
+  font-style: italic;
+  min-height: 30px;
+}
+
+#scoreboard {
+  border: 1px solid white;
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 240px;
+}
+
+#scoreboard th, td {
+  border: 1px solid white;
+  padding: 5px;
+  width: 80px;
+}
+
+.start-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#start-screen-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hand {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.hand .card {
+  background-color: #777;
+  width: 80px;
+  height: 120px;
+  margin: 0 5px;
+  border-radius: 8px;
+  line-height: 120px;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.table-container {
+  position: absolute;
+  top: 80px;
+  left: 50px;
+  max-height: 556px;
+  overflow-y: auto;
+}
