@@ -27,11 +27,19 @@ let roundScores = [0, 0, 0];
 let currentTrump = null;
 let cardsPlayed = [];
 let hasFolded = [];
+let currentInstructions = -1;
 
-document.getElementById("start-button").onclick = () => {
-    document.getElementById("start-screen-container").style.display = "none";
-    document.getElementById("game-container").style.display = "block";
-    startGame();
+import { instructions, instructionsHeadings } from './instructions.js';
+
+document.getElementById("start-button").onclick = () => { startGame() };
+document.getElementById("instructions-button").onclick = () => { showInstructions() };
+document.getElementById("next-instructions-button").onclick = () => { 
+    if (currentInstructions == 8) {
+        returnToHomeScreen();
+    } else {
+        currentInstructions++;
+        updateInstructions();
+    }
 };
 
 function addCard(hand, cardToAdd) {
@@ -286,9 +294,10 @@ function desirableCards(playerNumber) {
     }
 }
 
-function endGame() {
+function returnToHomeScreen() {
     document.getElementById("game-container").style.display = "none";
     document.getElementById("start-screen-container").style.display = "flex";
+    document.getElementById("instructions-container").style.display = "none";
 }
 
 async function endRound() {
@@ -303,15 +312,15 @@ async function endRound() {
     if (scoreSheet[lastRound][0] >= 1000) {
         announce("You won! Congratulations!");
         await wait(5000);
-        endGame();
+        returnToHomeScreen();
     } else if (scoreSheet[lastRound][1] >= 1000) {
         announce("Alice won! Congratulations!");
         await wait(5000);
-        endGame();
+        returnToHomeScreen();
     } else if (scoreSheet[lastRound][2] >= 1000) {
         announce("Bob won! Congratulations!");
         await wait(5000);
-        endGame();
+        returnToHomeScreen();
     } else {
         announce("New round starting.");
         await wait(2000);
@@ -655,6 +664,13 @@ async function scoreRound() {
     return endRound();
 }
 
+function showInstructions() {
+    currentInstructions = 0;
+    document.getElementById("start-screen-container").style.display = "none";
+    document.getElementById("instructions-container").style.display = "block";
+    updateInstructions();
+}
+
 function shuffle(deck) {
     for (let i = deck.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -712,6 +728,8 @@ async function startBidding() {
 }
 
 function startGame() {
+    document.getElementById("start-screen-container").style.display = "none";
+    document.getElementById("game-container").style.display = "block";
     leftOfDealer = Math.floor(Math.random() * 3);
     allowedToBid = [];
     playPhase = null;
@@ -888,6 +906,13 @@ function updateHands() {
     document.getElementById("alice-hand").innerHTML = "<b>Alice:</b> " + aliceHand.map(cardVisibility).join(", ");
     document.getElementById("bob-hand").innerHTML = "<b>Bob:</b> " + bobHand.map(cardVisibility).join(", ");
     document.getElementById("your-hand").innerHTML = "<b>You:</b> " + yourHand.map(colorCard).join(", ");
+}
+
+function updateInstructions() {
+    document.getElementById("instructions-heading").innerHTML = instructionsHeadings[currentInstructions];
+    for (let i = 0; i < 12; i++) {
+        document.getElementById(`instructions-p${i}`).innerHTML = instructions[currentInstructions][i];
+    }
 }
 
 function updateScoreboard() {
