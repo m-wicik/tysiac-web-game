@@ -28,8 +28,9 @@ let currentTrump = null;
 let cardsPlayed = [];
 let hasFolded = [];
 let currentInstructions = -1;
+let wonAtLeastOneHand;
 
-import { instructions, instructionsHeadings } from './instructions.js';
+import {instructions, instructionsHeadings} from './instructions.js';
 
 document.getElementById("start-button").onclick = () => { startGame() };
 document.getElementById("instructions-button").onclick = () => { showInstructions() };
@@ -530,6 +531,7 @@ async function playRound() {
     updateButtons();
     announce("Round starting.");
     whoStarted = playerBidding;
+    wonAtLeastOneHand = false;
     for (let turn = 0; turn < 8; turn++) {
         await wait(2000);
         whoStarted = await playTurn();
@@ -613,16 +615,19 @@ function scoreCards(cards) {
     if (winner == 1) {
         const playerNumber = nextPlayerNumber(whoStarted);
         roundScores[playerNumber] += totalScore;
+        if (playerNumber == playerBidding) wonAtLeastOneHand = true;
         announce(`${playerOrder[playerNumber]} ${winOrWins(playerNumber)} the hand.`);
         return playerNumber;
     } else if (winner == 2) {
         const playerNumber = nextPlayerNumber(nextPlayerNumber(whoStarted));
         roundScores[playerNumber] += totalScore;
+        if (playerNumber == playerBidding) wonAtLeastOneHand = true;
         announce(`${playerOrder[playerNumber]} ${winOrWins(playerNumber)} the hand.`);
         return playerNumber;
     } else {
         const playerNumber = whoStarted;
         roundScores[playerNumber] += totalScore;
+        if (playerNumber == playerBidding) wonAtLeastOneHand = true;
         announce(`${playerOrder[playerNumber]} ${winOrWins(playerNumber)} the hand.`);
         return playerNumber;
     }
@@ -634,11 +639,13 @@ async function scoreRound() {
     numRounds == 0 ? lastRoundScores = [0, 0, 0] : lastRoundScores = scoreSheet[numRounds - 1];
     let runningTotals = [];
 
-    const bidderSucceeded = roundScores[playerBidding] >= currentBid;
+    const bidderSucceeded = wonAtLeastOneHand && roundScores[playerBidding] >= currentBid;
     if (bidderSucceeded) {
         announce(playerOrder[playerBidding] + " successfully earned " + currentBid + " points.");
-    } else {
+    } else if (wonAtLeastOneHand) {
         announce(playerOrder[playerBidding] + " failed to earn " + currentBid + " points.");
+    } else {
+        announce(playerOrder[playerBidding] + " failed to win at least one trick.");
     }
     await wait(2000);
 
